@@ -24,20 +24,20 @@ from volatility.plugins.registry.registryapi import RegistryApi
 registry = RegistryApi(config)
 registry.populate_offsets()
 
-sys_offset = None
+hive_offset = None
 
 for offset in registry.all_offsets:
 	if registry.all_offsets[offset].endswith("\\ntuser.dat"):
-		sys_offset = offset
+		hive_offset = offset
 		print "[*] Found ntuser.dat offset at: 0x%08x" % offset
 		break
 
-if sys_offset is None:
+if hive_offset is None:
 	print "[!] Error finding ntuser.dat offset."
 	exit()
 from volatility.plugins.registry.printkey import PrintKey
 
-config.HIVE_OFFSET = sys_offset
+config.HIVE_OFFSET = hive_offset
 config.KEY= "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
 
 autorunkey = PrintKey(config)
